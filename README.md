@@ -8,10 +8,10 @@ Here are the steps:
 1. Create Ikomia account for free [here](https://ikomia.com/accounts/signup/) (if you don't have one)
 2. Install [Ikomia software](https://ikomia.com/en/download)
 3. Launch the software and log in with your credentials
-4. Open Ikomia Store and install ResNeXtTrain plugin
+4. Open Ikomia Store and install ResNetTrain plugin
 5. Open images folder organized in *train* and *val* subfolders 
-6. Add ResNeXtTrain algorithm to the workflow
-7. Start the workflow and evaluate the prediction
+6. Add ResNetTrain algorithm to the workflow
+7. Start the workflow and evaluate the training thanks to [MLflow](https://www.mlflow.org/) integration
 
 That's it!
 

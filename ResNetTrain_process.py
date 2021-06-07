@@ -90,10 +90,10 @@ class ResNetTrainProcess(dnntrain.TrainProcess):
 # - Factory class to build process object
 # - Inherits dataprocess.CProcessFactory from Ikomia API
 # --------------------
-class ResNetTrainProcessFactory(dataprocess.CProcessFactory):
+class ResNetTrainProcessFactory(dataprocess.CTaskFactory):
 
     def __init__(self):
-        dataprocess.CProcessFactory.__init__(self)
+        dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "ResNet Train"
         self.info.shortDescription = "Training process for ResNet convolutional network."

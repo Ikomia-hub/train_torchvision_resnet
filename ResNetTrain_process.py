@@ -3,7 +3,7 @@ from ikomia.dnn import dnntrain
 import os
 import copy
 # Your imports below
-import ResNet
+from ResNetTrain.ResNet import Resnet
 
 
 # --------------------
@@ -47,7 +47,7 @@ class ResNetTrainProcess(dnntrain.TrainProcess):
         else:
             self.setParam(copy.deepcopy(param))
 
-        self.resnet = ResNet.Resnet(self.getParam())
+        self.resnet = Resnet(self.getParam())
         self.enableTensorboard(False)
 
     def getProgressSteps(self, eltCount=1):

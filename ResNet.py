@@ -7,7 +7,7 @@ from ikomia.dnn.torch import utils, models
 from torchvision import datasets, transforms
 
 
-class Resnet:
+class Resnet(object):
     def __init__(self, parameters):
         self.stop_train = False
         self.parameters = parameters

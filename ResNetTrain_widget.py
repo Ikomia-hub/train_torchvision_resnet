@@ -1,6 +1,5 @@
 from ikomia import utils, core, dataprocess
-import ResNetTrain_process as processMod
-
+from ResNetTrain.ResNetTrain_process import ResNetTrainParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
 
@@ -15,7 +14,7 @@ class ResNetTrainWidget(core.CWorkflowTaskWidget):
         core.CWorkflowTaskWidget.__init__(self, parent)
 
         if param is None:
-            self.parameters = processMod.ResNetTrainParam()
+            self.parameters = ResNetTrainParam()
         else:
             self.parameters = param
 

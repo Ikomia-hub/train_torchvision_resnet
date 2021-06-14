@@ -1,6 +1,4 @@
 from ikomia import dataprocess
-from ResNetTrain.ResNetTrain_process import ResNetTrainProcessFactory
-from ResNetTrain.ResNetTrain_widget import ResNetTrainWidgetFactory
 
 
 # --------------------
@@ -14,8 +12,10 @@ class ResNetTrain(dataprocess.CPluginProcessInterface):
 
     def getProcessFactory(self):
         # Instantiate process object
+        from ResNetTrain.ResNetTrain_process import ResNetTrainProcessFactory
         return ResNetTrainProcessFactory()
 
     def getWidgetFactory(self):
         # Instantiate associated widget object
+        from ResNetTrain.ResNetTrain_widget import ResNetTrainWidgetFactory
         return ResNetTrainWidgetFactory()

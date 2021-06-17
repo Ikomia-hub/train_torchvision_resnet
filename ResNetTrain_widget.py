@@ -1,4 +1,5 @@
-from ikomia import utils, core, dataprocess
+from ikomia import core, dataprocess
+from ikomia.utils import pyqtutils, qtconversion
 from ResNetTrain.ResNetTrain_process import ResNetTrainParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
@@ -20,29 +21,29 @@ class ResNetTrainWidget(core.CWorkflowTaskWidget):
 
         # Create layout : QGridLayout by default
         self.grid_layout = QGridLayout()
-        self.combo_model = utils.append_combo(self.grid_layout, "Model name")
+        self.combo_model = pyqtutils.append_combo(self.grid_layout, "Model name")
         self.combo_model.addItem("resnet18")
         self.combo_model.addItem("resnet34")
         self.combo_model.addItem("resnet50")
         self.combo_model.addItem("resnet101")
         self.combo_model.addItem("resnet152")
 
-        self.spin_workers = utils.append_spin(self.grid_layout, label="Data loader workers",
+        self.spin_workers = pyqtutils.append_spin(self.grid_layout, label="Data loader workers",
                                               value=self.parameters.cfg["num_workers"], min=0, max=8, step=2)
 
-        self.spin_batch = utils.append_spin(self.grid_layout, label="Batch size",
+        self.spin_batch = pyqtutils.append_spin(self.grid_layout, label="Batch size",
                                             value=self.parameters.cfg["batch_size"], min=1, max=1024, step=1)
 
-        self.spin_epoch = utils.append_spin(self.grid_layout, label="Epochs", value=self.parameters.cfg["epochs"], min=1)
+        self.spin_epoch = pyqtutils.append_spin(self.grid_layout, label="Epochs", value=self.parameters.cfg["epochs"], min=1)
 
-        self.spin_classes = utils.append_spin(self.grid_layout, label="Classes", value=self.parameters.cfg["classes"], min=1)
+        self.spin_classes = pyqtutils.append_spin(self.grid_layout, label="Classes", value=self.parameters.cfg["classes"], min=1)
 
-        self.spin_size = utils.append_spin(self.grid_layout, label="Input size", value=self.parameters.cfg["input_size"])
+        self.spin_size = pyqtutils.append_spin(self.grid_layout, label="Input size", value=self.parameters.cfg["input_size"])
 
-        self.check_pretrained = utils.append_check(self.grid_layout, label="Pre-trained model",
+        self.check_pretrained = pyqtutils.append_check(self.grid_layout, label="Pre-trained model",
                                                    checked=self.parameters.cfg["use_pretrained"])
 
-        self.check_features = utils.append_check(self.grid_layout, label="Feature Extract mode",
+        self.check_features = pyqtutils.append_check(self.grid_layout, label="Feature Extract mode",
                                                  checked=self.parameters.cfg["feature_extract"])
 
         label_model_format = QLabel("Model format")
@@ -55,13 +56,13 @@ class ResNetTrainWidget(core.CWorkflowTaskWidget):
         self.check_onnx.setChecked(self.parameters.cfg["export_onnx"])
         self.grid_layout.addWidget(self.check_onnx, row+1, 1)
 
-        self.browse_folder = utils.append_browse_file(self.grid_layout, label="Output folder",
+        self.browse_folder = pyqtutils.append_browse_file(self.grid_layout, label="Output folder",
                                                       path=self.parameters.cfg["output_folder"],
                                                       tooltip="Select output folder",
                                                       mode=QFileDialog.Directory)
 
         # PyQt -> Qt wrapping
-        layout_ptr = utils.PyQtToQt(self.grid_layout)
+        layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
 
         # Set widget layout
         self.setLayout(layout_ptr)

@@ -1,4 +1,5 @@
 from ikomia import core, dataprocess
+from ikomia.core.task import TaskParam
 from ikomia.dnn import dnntrain
 import os
 import copy
@@ -10,10 +11,10 @@ from ResNetTrain.ResNet import Resnet
 # - Class to handle the process parameters
 # - Inherits core.CProtocolTaskParam from Ikomia API
 # --------------------
-class ResNetTrainParam(dnntrain.TrainParam):
+class ResNetTrainParam(TaskParam):
 
     def __init__(self):
-        dnntrain.TrainParam.__init__(self)
+        TaskParam.__init__(self)
         # Place default value initialization here
         self.cfg["model_name"] = 'resnet18'
         self.cfg["batch_size"] = 8

@@ -1,9 +1,9 @@
+import os
+import copy
+from distutils.util import strtobool
 from ikomia import core, dataprocess
 from ikomia.core.task import TaskParam
 from ikomia.dnn import dnntrain
-import os
-import copy
-# Your imports below
 from ResNetTrain.ResNet import Resnet
 
 
@@ -39,10 +39,10 @@ class ResNetTrainParam(TaskParam):
         self.cfg["momentum"] = float(param_map["momentum"])
         self.cfg["num_workers"] = int(param_map["num_workers"])
         self.cfg["input_size"] = int(param_map["input_size"])
-        self.cfg["use_pretrained"] = bool(param_map["use_pretrained"])
-        self.cfg["feature_extract"] = bool(param_map["feature_extract"])
-        self.cfg["export_pth"] = bool(param_map["export_pth"])
-        self.cfg["export_onnx"] = bool(param_map["export_onnx"])
+        self.cfg["use_pretrained"] = strtobool(param_map["use_pretrained"])
+        self.cfg["feature_extract"] = strtobool(param_map["feature_extract"])
+        self.cfg["export_pth"] = strtobool(param_map["export_pth"])
+        self.cfg["export_onnx"] = strtobool(param_map["export_onnx"])
         self.cfg["output_folder"] = param_map["output_folder"]
 
 

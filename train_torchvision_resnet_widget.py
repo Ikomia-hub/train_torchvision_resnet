@@ -1,6 +1,6 @@
 from ikomia import core, dataprocess
 from ikomia.utils import pyqtutils, qtconversion
-from ResNetTrain.ResNetTrain_process import ResNetTrainParam
+from train_torchvision_resnet.train_torchvision_resnet_process import TrainResnetParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
 
@@ -9,13 +9,13 @@ from PyQt5.QtWidgets import *
 # - Class which implements widget associated with the process
 # - Inherits core.CProtocolTaskWidget from Ikomia API
 # --------------------
-class ResNetTrainWidget(core.CWorkflowTaskWidget):
+class TrainResnetWidget(core.CWorkflowTaskWidget):
 
     def __init__(self, param, parent):
         core.CWorkflowTaskWidget.__init__(self, parent)
 
         if param is None:
-            self.parameters = ResNetTrainParam()
+            self.parameters = TrainResnetParam()
         else:
             self.parameters = param
 
@@ -90,13 +90,13 @@ class ResNetTrainWidget(core.CWorkflowTaskWidget):
 # - Factory class to build process widget object
 # - Inherits dataprocess.CWidgetFactory from Ikomia API
 # --------------------
-class ResNetTrainWidgetFactory(dataprocess.CWidgetFactory):
+class TrainResnetWidgetFactory(dataprocess.CWidgetFactory):
 
     def __init__(self):
         dataprocess.CWidgetFactory.__init__(self)
         # Set the name of the process -> it must be the same as the one declared in the process factory class
-        self.name = "ResNet Train"
+        self.name = "train_torchvision_resnet"
 
     def create(self, param):
         # Create widget object
-        return ResNetTrainWidget(param, None)
+        return TrainResnetWidget(param, None)

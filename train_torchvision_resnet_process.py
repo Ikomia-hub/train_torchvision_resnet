@@ -4,14 +4,14 @@ from distutils.util import strtobool
 from ikomia import core, dataprocess
 from ikomia.core.task import TaskParam
 from ikomia.dnn import dnntrain
-from ResNetTrain.ResNet import Resnet
+from train_torchvision_resnet.resnet import Resnet
 
 
 # --------------------
 # - Class to handle the process parameters
 # - Inherits core.CProtocolTaskParam from Ikomia API
 # --------------------
-class ResNetTrainParam(TaskParam):
+class TrainResnetParam(TaskParam):
 
     def __init__(self):
         TaskParam.__init__(self)
@@ -50,7 +50,7 @@ class ResNetTrainParam(TaskParam):
 # - Class which implements the process
 # - Inherits core.CProtocolTask or derived from Ikomia API
 # --------------------
-class ResNetTrainProcess(dnntrain.TrainProcess):
+class TrainResnet(dnntrain.TrainProcess):
 
     def __init__(self, name, param):
         dnntrain.TrainProcess.__init__(self, name, param)
@@ -59,7 +59,7 @@ class ResNetTrainProcess(dnntrain.TrainProcess):
 
         # Create parameters class
         if param is None:
-            self.setParam(ResNetTrainParam())
+            self.setParam(TrainResnetParam())
         else:
             self.setParam(copy.deepcopy(param))
 
@@ -106,12 +106,12 @@ class ResNetTrainProcess(dnntrain.TrainProcess):
 # - Factory class to build process object
 # - Inherits dataprocess.CProcessFactory from Ikomia API
 # --------------------
-class ResNetTrainProcessFactory(dataprocess.CTaskFactory):
+class TrainResnetFactory(dataprocess.CTaskFactory):
 
     def __init__(self):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
-        self.info.name = "ResNet Train"
+        self.info.name = "train_torchvision_resnet"
         self.info.shortDescription = "Training process for ResNet convolutional network."
         self.info.description = "Training process for ResNet convolutional network. It requires a specific dataset " \
                                 "structure based on folder names. It follows the PyTorch torchvision convention. " \
@@ -130,4 +130,4 @@ class ResNetTrainProcessFactory(dataprocess.CTaskFactory):
 
     def create(self, param=None):
         # Create process object
-        return ResNetTrainProcess(self.info.name, param)
+        return TrainResnet(self.info.name, param)

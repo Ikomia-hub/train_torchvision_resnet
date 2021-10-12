@@ -55,6 +55,7 @@ class TrainResnet(dnntrain.TrainProcess):
     def __init__(self, name, param):
         dnntrain.TrainProcess.__init__(self, name, param)
         # Add input/output of the process here
+        self.removeInput(0)
         self.addInput(dataprocess.CPathIO(core.IODataType.FOLDER_PATH))
 
         # Create parameters class

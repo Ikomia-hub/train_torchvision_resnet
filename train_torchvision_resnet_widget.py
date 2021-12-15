@@ -27,6 +27,7 @@ class TrainResnetWidget(core.CWorkflowTaskWidget):
         self.combo_model.addItem("resnet50")
         self.combo_model.addItem("resnet101")
         self.combo_model.addItem("resnet152")
+        self.combo_model.setCurrentText(self.parameters.cfg["model_name"])
 
         self.spin_workers = pyqtutils.append_spin(self.grid_layout, label="Data loader workers",
                                               value=self.parameters.cfg["num_workers"], min=0, max=8, step=2)

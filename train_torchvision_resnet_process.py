@@ -18,10 +18,10 @@ class TrainResnetParam(TaskParam):
         # Place default value initialization here
         self.cfg["model_name"] = 'resnet18'
         self.cfg["batch_size"] = 8
-        self.cfg["classes"] = 2
         self.cfg["epochs"] = 15
         self.cfg["learning_rate"] = 0.001
         self.cfg["momentum"] = 0.9
+        self.cfg["weight_decay"] = 1e-4
         self.cfg["input_size"] = 224
         self.cfg["num_workers"] = 0
         self.cfg["use_pretrained"] = True
@@ -33,10 +33,10 @@ class TrainResnetParam(TaskParam):
     def setParamMap(self, param_map):
         self.cfg["model_name"] = param_map["model_name"]
         self.cfg["batch_size"] = int(param_map["batch_size"])
-        self.cfg["classes"] = int(param_map["classes"])
         self.cfg["epochs"] = int(param_map["epochs"])
         self.cfg["learning_rate"] = float(param_map["learning_rate"])
         self.cfg["momentum"] = float(param_map["momentum"])
+        self.cfg["weight_decay"] = float(param_map["weight_decay"])
         self.cfg["num_workers"] = int(param_map["num_workers"])
         self.cfg["input_size"] = int(param_map["input_size"])
         self.cfg["use_pretrained"] = strtobool(param_map["use_pretrained"])
@@ -92,11 +92,11 @@ class TrainResnet(dnntrain.TrainProcess):
         # Call endTaskRun to finalize process
         self.endTaskRun()
 
-    def on_epoch_end(self, metrics):
+    def on_epoch_end(self, metrics, epoch):
         # Step progress bar:
         self.emitStepProgress()
         # Log metrics
-        self.log_metrics(metrics)
+        self.log_metrics(metrics, epoch)
 
     def stop(self):
         super().stop()
@@ -120,7 +120,7 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
                                 "One could train the full network from pre-trained weights or keep extracted features " \
                                 "and re-train only the classification layer."
         self.info.authors = "Ikomia team"
-        self.info.version = "1.2.0"
+        self.info.version = "1.3.0"
         self.info.year = 2020
         self.info.license = "MIT License"
         self.info.repo = "https://github.com/Ikomia-dev"

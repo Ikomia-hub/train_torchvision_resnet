@@ -37,8 +37,6 @@ class TrainResnetWidget(core.CWorkflowTaskWidget):
 
         self.spin_epoch = pyqtutils.append_spin(self.grid_layout, label="Epochs", value=self.parameters.cfg["epochs"], min=1)
 
-        self.spin_classes = pyqtutils.append_spin(self.grid_layout, label="Classes", value=self.parameters.cfg["classes"], min=1)
-
         self.spin_size = pyqtutils.append_spin(self.grid_layout, label="Input size", value=self.parameters.cfg["input_size"])
 
         self.check_pretrained = pyqtutils.append_check(self.grid_layout, label="Pre-trained model",
@@ -75,7 +73,6 @@ class TrainResnetWidget(core.CWorkflowTaskWidget):
         self.parameters.cfg["model_name"] = self.combo_model.currentText()
         self.parameters.cfg["batch_size"] = self.spin_batch.value()
         self.parameters.cfg["epochs"] = self.spin_epoch.value()
-        self.parameters.cfg["classes"] = self.spin_classes.value()
         self.parameters.cfg["input_size"] = self.spin_size.value()
         self.parameters.cfg["use_pretrained"] = self.check_pretrained.isChecked()
         self.parameters.cfg["feature_extract"] = self.check_features.isChecked()

@@ -136,7 +136,7 @@ class Resnet(object):
                 print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
                 if phase == 'val':
-                    if epoch_acc > best_acc:
+                    if epoch_acc >= best_acc:
                         # deep copy the model
                         best_acc = epoch_acc
                         best_model_wts = copy.deepcopy(model.state_dict())

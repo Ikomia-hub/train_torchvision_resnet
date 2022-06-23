@@ -15,5 +15,5 @@ def test(t, data_dict):
     params["epochs"] = 1
     params["batch_size"] = 2
     task.set_parameters(t, params)
-    input_path.setPath(data_dict["datasets"]["classification"])
+    input_path.setPath(data_dict["datasets"]["classification"]["dataset_classification"])
     yield run_for_test(t)

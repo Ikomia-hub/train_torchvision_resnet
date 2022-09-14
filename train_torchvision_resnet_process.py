@@ -1,7 +1,6 @@
 import os
 import copy
-from distutils.util import strtobool
-from ikomia import core, dataprocess
+from ikomia import utils, core, dataprocess
 from ikomia.core.task import TaskParam
 from ikomia.dnn import dnntrain
 from train_torchvision_resnet.resnet import Resnet
@@ -39,10 +38,10 @@ class TrainResnetParam(TaskParam):
         self.cfg["weight_decay"] = float(param_map["weight_decay"])
         self.cfg["num_workers"] = int(param_map["num_workers"])
         self.cfg["input_size"] = int(param_map["input_size"])
-        self.cfg["use_pretrained"] = strtobool(param_map["use_pretrained"])
-        self.cfg["feature_extract"] = strtobool(param_map["feature_extract"])
-        self.cfg["export_pth"] = strtobool(param_map["export_pth"])
-        self.cfg["export_onnx"] = strtobool(param_map["export_onnx"])
+        self.cfg["use_pretrained"] = utils.strtobool(param_map["use_pretrained"])
+        self.cfg["feature_extract"] = utils.strtobool(param_map["feature_extract"])
+        self.cfg["export_pth"] = utils.strtobool(param_map["export_pth"])
+        self.cfg["export_onnx"] = utils.strtobool(param_map["export_onnx"])
         self.cfg["output_folder"] = param_map["output_folder"]
 
 

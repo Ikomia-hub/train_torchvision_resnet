@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def test(t, data_dict):
     logger.info("===== Test::train torchvision resnet =====")
-    input_path = t.getInput(0)
+    input_path = t.get_input(0)
     params = task.get_parameters(t)
     params["epochs"] = 1
     params["batch_size"] = 2

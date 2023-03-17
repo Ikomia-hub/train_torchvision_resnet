@@ -29,7 +29,7 @@ class TrainResnetParam(TaskParam):
         self.cfg["export_onnx"] = False
         self.cfg["output_folder"] = os.path.dirname(os.path.realpath(__file__)) + "/models/"
 
-    def setParamMap(self, param_map):
+    def set_values(self, param_map):
         self.cfg["model_name"] = param_map["model_name"]
         self.cfg["batch_size"] = int(param_map["batch_size"])
         self.cfg["epochs"] = int(param_map["epochs"])
@@ -54,22 +54,22 @@ class TrainResnet(dnntrain.TrainProcess):
     def __init__(self, name, param):
         dnntrain.TrainProcess.__init__(self, name, param)
         # Add input/output of the process here
-        self.removeInput(0)
-        self.addInput(dataprocess.CPathIO(core.IODataType.FOLDER_PATH))
+        self.remove_input(0)
+        self.add_input(dataprocess.CPathIO(core.IODataType.FOLDER_PATH))
 
         # Create parameters class
         if param is None:
-            self.setParam(TrainResnetParam())
+            self.set_param_object(TrainResnetParam())
         else:
-            self.setParam(copy.deepcopy(param))
+            self.set_param_object(copy.deepcopy(param))
 
-        self.resnet = Resnet(self.getParam())
-        self.enableTensorboard(False)
+        self.resnet = Resnet(self.get_param_object())
+        self.enable_tensorboard(False)
 
-    def getProgressSteps(self):
+    def get_progress_steps(self):
         # Function returning the number of progress steps for this process
         # This is handled by the main progress bar of Ikomia application
-        param = self.getParam()
+        param = self.get_param_object()
         if param is not None:
             return param.cfg["epochs"]
         else:
@@ -77,23 +77,23 @@ class TrainResnet(dnntrain.TrainProcess):
 
     def run(self):
         # Core function of your process
-        # Call beginTaskRun for initialization
-        self.beginTaskRun()
+        # Call begin_task_run for initialization
+        self.begin_task_run()
 
         # Get dataset path from input
-        path_input = self.getInput(0)
+        path_input = self.get_input(0)
 
         print("Starting training job...")
-        self.resnet.launch(path_input.getPath(), self.on_epoch_end)
+        self.resnet.launch(path_input.get_path(), self.on_epoch_end)
 
         print("Training job finished.")
 
-        # Call endTaskRun to finalize process
-        self.endTaskRun()
+        # Call end_task_run to finalize process
+        self.end_task_run()
 
     def on_epoch_end(self, metrics, epoch):
         # Step progress bar:
-        self.emitStepProgress()
+        self.emit_step_progress()
         # Log metrics
         self.log_metrics(metrics, epoch)
 
@@ -112,20 +112,20 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "train_torchvision_resnet"
-        self.info.shortDescription = "Training process for ResNet convolutional network."
+        self.info.short_description = "Training process for ResNet convolutional network."
         self.info.description = "Training process for ResNet convolutional network. It requires a specific dataset " \
                                 "structure based on folder names. It follows the PyTorch torchvision convention. " \
                                 "The process enables to train ResNet network from scratch or for transfer learning. " \
                                 "One could train the full network from pre-trained weights or keep extracted features " \
                                 "and re-train only the classification layer."
         self.info.authors = "Ikomia team"
-        self.info.version = "1.3.0"
+        self.info.version = "1.4.0"
         self.info.year = 2020
         self.info.license = "MIT License"
         self.info.repo = "https://github.com/Ikomia-dev"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Classification"
-        self.info.iconPath = "icons/pytorch-logo.png"
+        self.info.icon_path = "icons/pytorch-logo.png"
         self.info.keywords = "ResNet,classification,train"
 
     def create(self, param=None):

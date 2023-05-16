@@ -122,7 +122,7 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
         self.info.version = "1.4.0"
         self.info.year = 2020
         self.info.license = "MIT License"
-        self.info.repo = "https://github.com/Ikomia-dev"
+        self.info.repository = "https://github.com/Ikomia-dev"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Classification"
         self.info.icon_path = "icons/pytorch-logo.png"

@@ -113,16 +113,12 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
         # Set process information as string here
         self.info.name = "train_torchvision_resnet"
         self.info.short_description = "Training process for ResNet convolutional network."
-        self.info.description = "Training process for ResNet convolutional network. It requires a specific dataset " \
-                                "structure based on folder names. It follows the PyTorch torchvision convention. " \
-                                "The process enables to train ResNet network from scratch or for transfer learning. " \
-                                "One could train the full network from pre-trained weights or keep extracted features " \
-                                "and re-train only the classification layer."
         self.info.authors = "Ikomia team"
         self.info.version = "1.4.0"
         self.info.year = 2020
         self.info.license = "MIT License"
-        self.info.repository = "https://github.com/Ikomia-dev"
+        self.info.repository = "https://github.com/Ikomia-hub/train_torchvision_resnet"
+        self.info.original_repository = "https://github.com/pytorch/vision"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Classification"
         self.info.icon_path = "icons/pytorch-logo.png"

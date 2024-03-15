@@ -114,7 +114,7 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
         self.info.name = "train_torchvision_resnet"
         self.info.short_description = "Training process for ResNet convolutional network."
         self.info.authors = "Ikomia team"
-        self.info.version = "1.4.1"
+        self.info.version = "1.5.0"
         self.info.year = 2020
         self.info.license = "MIT License"
         self.info.repository = "https://github.com/Ikomia-hub/train_torchvision_resnet"

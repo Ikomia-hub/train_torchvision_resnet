@@ -96,7 +96,7 @@ data_loader = wf.add_task(name="dataset_classification")
 data_loader.set_parameters({"dataset_folder": "path/to/dataset/folder"}) 
 
 # Add train algorithm 
-train = wf.add_task(name="train_torchvision_resnext", auto_connect=True)
+train = wf.add_task(name="train_torchvision_resnet", auto_connect=True)
 train.set_parameters({
     "model_name": 'resnet18',
     "batch_size": "8",

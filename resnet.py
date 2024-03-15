@@ -13,6 +13,7 @@ class Resnet(object):
         self.parameters = parameters
         # Detect if we have a GPU available
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.model_folder = self.parameters.cfg["output_folder"]
 
     def load_data(self, dataset_dir):
         print("Initializing Datasets and Dataloaders...")
@@ -78,13 +79,10 @@ class Resnet(object):
 
     def train_model(self, model, data_loaders, criterion, optimizer, classes, on_epoch_end):
         since = time.time()
-
         metrics = {}
         val_acc_history = []
         best_model_wts = copy.deepcopy(model.state_dict())
         best_acc = 0.0
-        epoch_loss = 0.0
-        epoch_acc = 0.0
         class_count = len(classes)
 
         for epoch in range(self.parameters.cfg["epochs"]):
@@ -117,6 +115,8 @@ class Resnet(object):
                         outputs = model(inputs)
                         loss = criterion(outputs, labels)
                         _, preds = torch.max(outputs, 1)
+                        print(f"gt: {labels}")
+                        print(f"outputs: {outputs}")
 
                         # backward + optimize only if in training phase
                         if phase == 'train':
@@ -126,28 +126,48 @@ class Resnet(object):
                     # statistics
                     running_loss += loss.item() * inputs.size(0)
                     running_corrects += torch.sum(preds == labels.data)
-
+                    # confusion matrix
                     for t, p in zip(labels.view(-1), preds.view(-1)):
                         confusion_matrix[t.long(), p.long()] += 1
 
                 data_count = len(data_loaders[phase].dataset)
                 epoch_loss = running_loss / data_count
                 epoch_acc = running_corrects.double() / data_count
-                print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+                print('{} loss: {:.4f} accuracy: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+                metrics[f"{phase} loss"] = epoch_loss
 
                 if phase == 'val':
                     if epoch_acc >= best_acc:
                         # deep copy the model
                         best_acc = epoch_acc
                         best_model_wts = copy.deepcopy(model.state_dict())
+                        # Save best model to disk
+                        model_path = os.path.join(self.model_folder, f"{self.parameters.cfg['model_name']}.pth")
+                        utils.save_pth(model, model_path)
+
+                    if class_count > 2:
+                        # multi-class classification
+                        tp = confusion_matrix.diag()
+                        fp = torch.sum(confusion_matrix, dim=1) - tp
+                        fn = torch.sum(confusion_matrix, dim=0) - tp
+                        precision = torch.mean(tp / (tp + fp))
+                        recall = torch.mean(tp / (tp + fn))
+                    else:
+                        # binary classification
+                        tp = confusion_matrix[1][1]
+                        fp = confusion_matrix[0][1]
+                        fn = confusion_matrix[1][0]
+                        precision = tp / (tp + fp)
+                        recall = tp / (tp + fn)
 
                     val_acc_history.append(epoch_acc)
-                    metrics["Validation loss"] = epoch_loss
-                    metrics["Validation accuracy"] = epoch_acc.item()
-                    metrics["Best validation accuracy"] = best_acc.item()
-
+                    metrics["val accuracy"] = epoch_acc.item()
+                    metrics["best val accuracy"] = best_acc.item()
+                    metrics["precision"] = precision.item()
+                    metrics["recall"] = recall.item()
+                    metrics["f1_score"] = (2 * (precision * recall) / (precision + recall)).item()
                     epoch_class_acc = confusion_matrix.diag() / confusion_matrix.sum(1)
-                    print("{} per class Acc: {}".format(phase, epoch_class_acc))
+                    print("{} per class accuracy: {}".format(phase, epoch_class_acc))
 
                     for i, acc in enumerate(epoch_class_acc):
                         key = classes[i] + " accuracy"
@@ -172,7 +192,18 @@ class Resnet(object):
         # Load dataset
         data_loaders, classes = self.load_data(dataset_dir)
 
-        # Setup the loss function
+        # Output folder
+        str_datetime = datetime.now().strftime("%d-%m-%YT%Hh%Mm%Ss")
+        self.model_folder = os.path.join(self.parameters.cfg["output_folder"], str_datetime)
+        os.makedirs(self.model_folder, exist_ok=True)
+
+        # class labels
+        class_path = os.path.join(self.model_folder, "classes.txt")
+        with open(class_path, "w") as f:
+            for cl in classes:
+                f.write(cl + "\n")
+
+        # Set the loss function
         loss = torch.nn.CrossEntropyLoss()
 
         # Initialize the model for this run
@@ -188,33 +219,16 @@ class Resnet(object):
         model_ft, hist = self.train_model(model, data_loaders, loss, optimizer, classes, on_epoch_end)
 
         # Save model
-        if not os.path.isdir(self.parameters.cfg["output_folder"]):
-            os.mkdir(self.parameters.cfg["output_folder"])
-
-        if not self.parameters.cfg["output_folder"].endswith('/'):
-            self.parameters.cfg["output_folder"] += '/'
-
-        str_datetime = datetime.now().strftime("%d-%m-%YT%Hh%Mm%Ss")
-        model_folder = self.parameters.cfg["output_folder"] + str_datetime + os.sep
-
-        if not os.path.isdir(model_folder):
-            os.mkdir(model_folder)
-
         # .pth
         if self.parameters.cfg["export_pth"]:
-            model_path = model_folder + self.parameters.cfg["model_name"] + ".pth"
+            model_path = os.path.join(self.model_folder, f"{self.parameters.cfg['model_name']}.pth")
             utils.save_pth(model_ft, model_path)
 
         # .onnx
         if self.parameters.cfg["export_onnx"]:
-            model_path = model_folder + self.parameters.cfg["model_name"] + ".onnx"
+            model_path = os.path.join(self.model_folder, f"{self.parameters.cfg['model_name']}.onnx")
             input_shape = [1, 3, self.parameters.cfg["input_size"], self.parameters.cfg["input_size"]]
             utils.save_onnx(model, input_shape, self.device, model_path)
-
-        # class labels
-        with open(model_folder + "classes.txt", "w") as f:
-            for cl in classes:
-                f.write(cl + "\n")
 
     def stop(self):
         self.stop_train = True

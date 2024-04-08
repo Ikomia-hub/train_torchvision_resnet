@@ -115,8 +115,6 @@ class Resnet(object):
                         outputs = model(inputs)
                         loss = criterion(outputs, labels)
                         _, preds = torch.max(outputs, 1)
-                        print(f"gt: {labels}")
-                        print(f"outputs: {outputs}")
 
                         # backward + optimize only if in training phase
                         if phase == 'train':

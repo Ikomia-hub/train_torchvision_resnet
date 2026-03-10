@@ -27,7 +27,8 @@ class TrainResnetParam(TaskParam):
         self.cfg["feature_extract"] = True
         self.cfg["export_pth"] = True
         self.cfg["export_onnx"] = False
-        self.cfg["output_folder"] = os.path.dirname(os.path.realpath(__file__)) + "/models/"
+        self.cfg["output_folder"] = os.path.dirname(
+            os.path.realpath(__file__)) + "/models/"
 
     def set_values(self, param_map):
         self.cfg["model_name"] = param_map["model_name"]
@@ -38,8 +39,10 @@ class TrainResnetParam(TaskParam):
         self.cfg["weight_decay"] = float(param_map["weight_decay"])
         self.cfg["num_workers"] = int(param_map["num_workers"])
         self.cfg["input_size"] = int(param_map["input_size"])
-        self.cfg["use_pretrained"] = utils.strtobool(param_map["use_pretrained"])
-        self.cfg["feature_extract"] = utils.strtobool(param_map["feature_extract"])
+        self.cfg["use_pretrained"] = utils.strtobool(
+            param_map["use_pretrained"])
+        self.cfg["feature_extract"] = utils.strtobool(
+            param_map["feature_extract"])
         self.cfg["export_pth"] = utils.strtobool(param_map["export_pth"])
         self.cfg["export_onnx"] = utils.strtobool(param_map["export_onnx"])
         self.cfg["output_folder"] = param_map["output_folder"]
@@ -114,7 +117,9 @@ class TrainResnetFactory(dataprocess.CTaskFactory):
         self.info.name = "train_torchvision_resnet"
         self.info.short_description = "Training process for ResNet convolutional network."
         self.info.authors = "Ikomia team"
-        self.info.version = "1.5.0"
+        self.info.version = "2.0.0"
+        self.info.min_ikomia_version = "0.15.0"
+        self.info.min_python_version = "3.11.0"
         self.info.year = 2020
         self.info.license = "MIT License"
         self.info.repository = "https://github.com/Ikomia-hub/train_torchvision_resnet"
